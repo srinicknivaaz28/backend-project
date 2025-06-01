@@ -28,6 +28,11 @@ const validateCourse = [
     .isLength({ min: 10, max: 1000 })
     .withMessage('Course description must be between 10 and 1000 characters'),
   
+  body('thumbnailUrl')
+    .optional()
+    .isURL()
+    .withMessage('Thumbnail URL must be a valid URL'),
+  
   body('modules')
     .isArray({ min: 1 })
     .withMessage('Course must have at least one module'),

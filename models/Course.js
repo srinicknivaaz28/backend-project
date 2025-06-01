@@ -48,6 +48,7 @@ const moduleSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+
   lessons: [lessonSchema],
   order: {
     type: Number,
@@ -73,6 +74,10 @@ const courseSchema = new mongoose.Schema({
     required: [true, 'Course description is required'],
     trim: true,
     maxlength: [1000, 'Course description cannot exceed 1000 characters']
+  },
+  thumbnailUrl: {
+    type: String,
+    default: ''
   },
   modules: [moduleSchema],
   instructor: {
@@ -127,12 +132,12 @@ courseSchema.index({ isPublished: 1 });
 courseSchema.index({ createdAt: -1 });
 
 // Virtual for total lessons count
-courseSchema.virtual('totalLessons').get(function() {
+courseSchema.virtual('totalLessons').get(function () {
   return this.modules.reduce((total, module) => total + module.lessons.length, 0);
 });
 
 // Virtual for total course duration
-courseSchema.virtual('totalDuration').get(function() {
+courseSchema.virtual('totalDuration').get(function () {
   return this.modules.reduce((total, module) => {
     return total + module.lessons.reduce((moduleTotal, lesson) => moduleTotal + lesson.duration, 0);
   }, 0);
