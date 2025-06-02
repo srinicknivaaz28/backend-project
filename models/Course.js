@@ -48,7 +48,10 @@ const moduleSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-
+  instructor: {
+    type: String,
+    default: ''
+  },
   lessons: [lessonSchema],
   order: {
     type: Number,
