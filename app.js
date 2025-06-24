@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+require('dotenv').config();
 const path = require('path');
 const connectDatabase = require('./config/connectDatabase');
 const cors = require("cors");
@@ -10,7 +11,8 @@ dotenv.config({path: path.join(__dirname, 'config', 'config.env')});
 
 // Connect to database
 connectDatabase();
-
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
+console.log('JWT_REFRESH_SECRET:', process.env.JWT_REFRESH_SECRET ? 'Set' : 'Not set');
 // Basic middleware
 app.use(cors());
 app.use(express.json({ limit: '5000mb' }));
@@ -41,6 +43,14 @@ try {
     console.log('Course routes loaded successfully');
 } catch (error) {
     console.log('Course routes not found, skipping...');
+}
+
+try {
+    const userRoutes = require('./routes/userRoutes');
+    app.use('/api/users', userRoutes);
+    console.log('User routes loaded successfully');
+} catch (error) {
+    console.log('User routes not found, skipping...');
 }
 
 // Error handling
